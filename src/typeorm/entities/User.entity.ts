@@ -1,4 +1,6 @@
+import { Exclude } from 'class-transformer';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -18,6 +20,7 @@ export class User {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @CreateDateColumn()
@@ -25,4 +28,13 @@ export class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @BeforeInsert()
+  emailToLowercase() {
+    this.email = this.email.toLowerCase();
+  }
+
+  constructor(partial: Partial<User>) {
+    Object.assign(this, partial);
+  }
 }
