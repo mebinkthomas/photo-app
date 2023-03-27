@@ -6,7 +6,9 @@ import {
   Post,
   UseInterceptors,
   Param,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '../../../auth/passport/jwt-auth.guard';
 import { CreateUserDto } from '../../dtos/createUser.dto';
 import { UsersService } from '../../services/users/users.service';
 
@@ -15,11 +17,13 @@ import { UsersService } from '../../services/users/users.service';
 export class UsersController {
   constructor(private userService: UsersService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   getUsers() {
     return this.userService.findAllUsers();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   getUserById(@Param('id') id: string) {
     return this.userService.findOneUser({ id });
