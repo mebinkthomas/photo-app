@@ -10,8 +10,13 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
-  getUsers() {
+
+  findAllUsers() {
     return this.userRepository.find();
+  }
+
+  findOneUser(query: object): Promise<User | undefined> {
+    return this.userRepository.findOneBy(query);
   }
 
   async createUser(userData: CreateUserParams) {

@@ -5,20 +5,26 @@ import {
   Get,
   Post,
   UseInterceptors,
+  Param,
 } from '@nestjs/common';
 import { CreateUserDto } from '../../dtos/createUser.dto';
 import { UsersService } from '../../services/users/users.service';
 
 @Controller('users')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
   constructor(private userService: UsersService) {}
 
-  @Get('users')
+  @Get()
   getUsers() {
-    return this.userService.getUsers();
+    return this.userService.findAllUsers();
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
+  @Get(':id')
+  getUserById(@Param('id') id: string) {
+    return this.userService.findOneUser({ id });
+  }
+
   @Post('signup')
   async createUser(@Body() userData: CreateUserDto) {
     const user = await this.userService.createUser(userData);
